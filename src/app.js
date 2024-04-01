@@ -24,7 +24,7 @@ const buscarIndiceSelecao = (id) => {
     return selecoes.findIndex(sel => sel.id == id);
 }
 
-//criar rota padrão ou  raiz
+//criação de rotas
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
@@ -45,7 +45,14 @@ app.post('/selecoes', (req, res) => {
 app.delete('/selecoes/:id', (req, res) => {
     let index = buscarIndiceSelecao(req.params.id);
     selecoes.splice(index, 1);
-    res.send(`Seleção com id: ${req.params.id} excluída com sucesso!`);
+    res.send(`Seleção com id: ${req.params} excluída com sucesso!`);
+});
+
+app.put('/selecoes/:id', (req, res) => {
+    let index = buscarIndiceSelecao(req.params.id);
+    selecoes[index].selecao = req.body.selecao;
+    selecoes[index].grupo = req.body.grupo;
+    res.json(selecoes);
 });
 
 export default app;
