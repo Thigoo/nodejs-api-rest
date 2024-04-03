@@ -1,81 +1,35 @@
-import conexao from '../database/conexao.js'
+import SelecaoRepository from '../repositories/SelecaoRepository.js';
 
 class SelecaoControler {
 
-    index(req, res)  {
-        const sql = "SELECT * FROM selecoes;";
-        conexao.query(sql, (erro, result) => {
-            if(erro) {
-                console.log(erro);
-                res.status(404).json({
-                    "erro": erro
-                })
-            } else {
-                res.status(200).json(result);
-            }
-        });
+    async index(req, res) {
+        const linha = await SelecaoRepository.findAll();
+        res.json(linha);
     }
 
-    show(req, res) {
+    async show(req, res) {
         const id = req.params.id;
-        const sql = "SELECT * FROM selecoes WHERE id=?;";
-        conexao.query(sql, id, (erro, result) => {
-            const linha = result[0];
-            if(erro) {
-                console.log(erro);
-                res.status(404).json({
-                    "erro": erro
-                })
-            } else {
-                res.status(200).json(linha);
-            }
-        });
+        const linha = await SelecaoRepository.findById(id);
+        res.json(linha);
     }
 
-    store(req, res) {
-    const selecao = req.body;
-    const sql = "INSERT INTO selecoes SET ?;";
-    conexao.query(sql, selecao, (erro, result) => {
-        if(erro) {
-            console.log(erro);
-            res.status(400).json({
-                "erro": erro
-            })
-        } else {
-            res.status(201).json(result);
-        }
-    });
-}
+    async store(req, res) {
+        const selecao = req.body;
+        const linha = await SelecaoRepository.create(selecao);
+        res.json(linha);    
+    }
 
-    update(req, res) {
+    async update(req, res) {
         const id = req.params.id;
         const selecao = req.body;
-        const sql = "UPDATE selecoes SET ? WHERE id=?;";
-        conexao.query(sql, [selecao, id], (erro, result) => {
-            if(erro) {
-                console.log(erro);
-                res.status(400).json({
-                    "erro": erro
-                })
-            } else {
-                res.status(200).json(result);
-            }
-        });
+        const linha = await SelecaoRepository.update(selecao, id);
+        res.json(linha);
     }
 
-    delete(req, res) {
+    async delete(req, res) {
         const id = req.params.id;
-        const sql = "DELETE FROM selecoes WHERE id=?;";
-        conexao.query(sql, id, (erro, result) => {
-            if(erro) {
-                console.log(erro);
-                res.status(404).json({
-                    "erro": erro
-                })
-            } else {
-                res.status(200).json(result);
-            }
-        });
+        const linha = await SelecaoRepository.delete(id);
+        res.json(linha);
     }
 
 }
