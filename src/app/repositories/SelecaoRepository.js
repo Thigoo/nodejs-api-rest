@@ -1,66 +1,30 @@
-import conexao from "../database/conexao.js";
+import { consulta } from "../database/conexao.js";
 
 class SelecaoRepository {
   //CRUD
   create(selecao) {
     const sql = "INSERT INTO selecoes SET ?;";
-    return new Promise((resolve, reject) => {
-
-        conexao.query(sql, selecao,(erro, result) => {
-          if (erro) return reject("Não foi possível cadastrar"); 
-
-          const selecoes = JSON.parse(JSON.stringify(result));
-          return resolve(selecoes);
-
-        });
-      });
+    return consulta(sql, selecao, 'Não foi posível cadastrar!');
   }
 
   findAll() {
     const sql = "SELECT * FROM selecoes;";
-    return new Promise((resolve, reject) => {
-      conexao.query(sql, (erro, result) => {
-        if (erro) return reject("Não foi possível localizar");
-
-        const selecoes = JSON.parse(JSON.stringify(result));
-        return resolve(selecoes);
-      });
-    });
+    return consulta(sql, 'Não foi possível localizar!');
   }
 
   findById(id) {
     const sql = "SELECT * FROM selecoes WHERE id=?;";
-    return new Promise((resolve, reject) => {
-      conexao.query(sql, id, (erro, result) => {
-        if (erro) return reject("Não foi possível localizar");
-        const selecoes = JSON.parse(JSON.stringify(result));
-        return resolve(selecoes);
-      });
-    });
+    return consulta(sql, id, `Não foi possível localizar seleção!`);
   }
 
   update(selecao, id) {
     const sql = "UPDATE selecoes SET ? WHERE id=?;";
-    return new Promise((resolve, reject) => {
-        conexao.query(sql, [selecao, id], (erro, result) => {
-          if (erro) return reject("Não foi possível atualizar");
-  
-          const selecoes = JSON.parse(JSON.stringify(result));
-          return resolve(selecoes);
-        });
-      });
+    return consulta(sql, [selecao, id], 'Não foi possível atualizar!');
   }
 
   delete(id) {
     const sql = "DELETE FROM selecoes WHERE id=?;";
-    return new Promise((resolve, reject) => {
-        conexao.query(sql, id, (erro, result) => {
-          if (erro) return reject("Não foi possível deletar");
-  
-          const selecoes = JSON.parse(JSON.stringify(result));
-          return resolve(selecoes);
-        });
-      });
+    return consulta(sql, id, 'Não foi possível deletar!');
   }
 }
 
